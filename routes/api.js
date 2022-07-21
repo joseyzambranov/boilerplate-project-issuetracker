@@ -27,7 +27,7 @@ module.exports = function (app) {
         {$match:{name:projectName}},
         {$unwind:"$issues"},
         _id!=undefined?{$match:{"issues._id":ObjectId(_id)}}:{$match:{}},
-        open!=undefined?{$match:{"issues.open": open }}:{$match:{}},
+        open!=undefined?{$match:{"issues.open":JSON.parse(open)}}:{$match:{}},
         issue_title!=undefined?{$match:{"issues.issue_title":issue_title}}:{$match:{}},
         issue_text!=undefined?{$match:{"issues.issue_text":issue_text}}:{$match:{}},
         created_by!=undefined?{$match:{"issues.created_by":created_by}}:{$match:{}},

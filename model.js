@@ -8,7 +8,7 @@ const IssueShema = new Schema({
     updated_on:Date,
     created_by:{type:String,required:true},
     assigned_to:String,
-    open:Boolean,
+    open:{type:Boolean},
     status_text:String,
 });
 const Issue = mongoose.model("Issue",IssueShema);
