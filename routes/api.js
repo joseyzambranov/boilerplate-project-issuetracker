@@ -20,7 +20,7 @@ module.exports = function (app) {
         assigned_to,
         status_text,
       } = req.query;
-      
+
       ProjectModel.aggregate([
         {$match:{name:projectName}},
         {$unwind:"$issues"},
@@ -116,7 +116,7 @@ module.exports = function (app) {
         !status_text&&
         !open
       ){
-        res.json({error:"no update field(s) sent"});
+        res.json({error:"no update field(s) sent",_id:_id});
         return;
       }
       ProjectModel.findOne({name:project},(err,projectdata)=>{
