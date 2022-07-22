@@ -156,20 +156,20 @@ module.exports = function (app) {
       }
       ProjectModel.findOne({name:project},(err,projectdata)=>{
         if(!projectdata||err){
-          res.send({error:"could not delete",_id:_id})
+          res.send({error:"could not deleted",_id:_id})
         }else{
           const issueData=projectdata.issues.id(_id)
           if(!issueData){
-            res.json({error:"could not delete",_id:_id})
+            res.json({error:"could not deleted",_id:_id})
             return
           }
         issueData.remove();  
 
         projectdata.save((err,data)=>{
           if(err||!data){
-            res.json({error:"could not delete",_id:issueData._id})
+            res.json({error:"could not deleted",_id:issueData._id})
           }else{
-            res.json({result:"successfully delete",_id:issueData._id})
+            res.json({result:"successfully deleted",_id:issueData._id})
           }
         })
         }
