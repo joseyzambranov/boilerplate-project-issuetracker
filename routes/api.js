@@ -153,6 +153,7 @@ module.exports = function (app) {
       const{_id} = req.body
       if(!_id){
         res.json({error:"missing _id"})
+        return
       }
       ProjectModel.findOne({name:project},(err,projectdata)=>{
         if(!projectdata||err){
