@@ -6,7 +6,7 @@ require("../bd-connection");
 
 chai.use(chaiHttp);
 
-let deleteId;
+let deleteID;
 
 /*Create an issue with every field: POST request to /api/issues/{project}
 Create an issue with only required fields: POST request to /api/issues/{project}
@@ -45,7 +45,7 @@ suite('Functional Tests', function() {
                     })
                     .end(function(err,res){
                         assert.equal(res.status,200);
-                        deleteId = res.body._id;
+                        deleteID = res.body._id;
                         assert.equal(res.body.issue_title,"Issue");
                         assert.equal(res.body.issue_text,"Function Test");
                         assert.equal(res.body.created_by,"fcc");
@@ -67,7 +67,6 @@ suite('Functional Tests', function() {
                     })
                     .end(function(err,res){
                         assert.equal(res.status,200);
-                        deleteId = res.body._id;
                         assert.equal(res.body.issue_title,"Issue");
                         assert.equal(res.body.issue_text,"Function Test");
                         assert.equal(res.body.created_by,"fcc");
@@ -198,7 +197,75 @@ suite('Functional Tests', function() {
                     done();
                 })
             })
+            test("Update an issue with no fields to update: PUT request to /api/issues/{project}",function(done){
+                chai.request(server)
+                .put("/api/issues/apitest")
+                .send(
+                    {_id: "62d8beb41193325fbf190e51"}
+                )
+                .end(function(err,res){
+                    assert.equal(res.status,200);
+                    assert.equal(res.body.error,"no update field(s) sent")
+                    done();
+                })
+            })
+            test("Update an issue with an invalid _id: PUT request to /api/issues/{project}",function(done){
+                chai.request(server)
+                .put("/api/issues/apitest")
+                .send(
+                    {_id: "62d8beb41193325fbf190e51+++++eee",
+                    issue_text: "modified",
+                    issue_title: "modified",
+                }
+                )
+                .end(function(err,res){
+                    assert.equal(res.status,200);
+                    assert.equal(res.body.error,"could not update")
+                    done();
+                })
+            })
             
+        })
+        //DELETE REQUIRED TEST
+        suite("3 Delete request tests",function(){
+            test("Delete an issue: DELETE request to /api/issues/{project}",function(done){
+                chai.request(server)
+                .delete("/api/issues/projects")
+                .send(
+                    {
+                        _id: deleteID,
+                    }
+                )
+                .end(function(err,res){
+                    assert.equal(res.status,200);
+                    assert.equal(res.body.result,"successfully deleted")
+                    done();
+                })
+            })
+            test("Delete an issue with an invalid _id: DELETE request to /api/issues/{project}",function(done){
+                chai.request(server)
+                .delete("/api/issues/apitest")
+                .send(
+                    {
+                        _id: "62d9b699f8ca85d384bfc078invalid",
+                    }
+                )
+                .end(function(err,res){
+                    assert.equal(res.status,200);
+                    assert.equal(res.body.error,"could not delete")
+                    done();
+                })
+            })
+            test("Delete an issue with missing _id: DELETE request to /api/issues/{project}",function(done){
+                chai.request(server)
+                .delete("/api/issues/apitest")
+                .send({})
+                .end(function(err,res){
+                    assert.equal(res.status,200);
+                    assert.equal(res.body.error,"missing _id")
+                    done();
+                })
+            })
         })
 
    
